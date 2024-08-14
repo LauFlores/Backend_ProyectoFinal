@@ -1,0 +1,142 @@
+<h1>Administración de Usuarios</h1>
+
+<div class="admin-users">
+    <button class="btnMios" id="deleteInactiveBtn">Eliminar Usuarios Inactivos</button>
+    <table class="table">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Rol</th>
+                    <th>Ultima Conexión</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each users}}
+                <tr>
+                    <td>{{this.name}}</td>
+                    <td>{{this.email}}</td>
+                    <td>{{this.role}}</td>
+                    <td>{{this.last_connection}}</td>
+                    <td>
+                        <form id="changeRoleForm-{{this._id}}" action="/api/users/premium/{{this._id}}" method="POST"
+                            onsubmit="changeRole(event, '{{this._id}}')">
+                            <button class="btnMios" type="submit">Cambiar Rol</button>
+                        </form>
+                        <form id="deleteUserForm-{{this._id}}" action="/api/users/{{this._id}}" onsubmit="deleteUser(event, '{{this._id}}')">
+                            <button class="btnMios" type="submit">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+</div>
+
+<script>
+    document.getElementById('deleteInactiveBtn').addEventListener('click', function () {
+        fetch('/api/users/inactive', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                location.reload(); // Recarga la página después de la eliminación
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('Error al eliminar usuarios inactivos');
+            });
+    });
+
+    async function changeRole(event, userId) {
+        event.preventDefault();
+
+        try {
+            const response = await fetch(`/api/users/premium/${userId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                if (errorData.message) {
+                    alert(errorData.message); // Mostrar mensaje específico del servidor
+                } else {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+            } else {
+                const data = await response.json();
+                console.log('Data recibida:', data); // Verificar qué datos se reciben
+
+                if (data.role === undefined) {
+                    alert('Falta la documentación requerida para cambiar el rol');
+                } else {
+                    alert(`Rol cambiado correctamente a ${data.role}`);
+                    location.reload(); // Recarga la página después de cambiar el rol
+                }
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error al cambiar el rol del usuario');
+        }
+        
+    }
+async function deleteUser(event, userId) {
+    event.preventDefault();
+
+    const confirmDelete = confirm("¿Estás seguro de que deseas eliminar este usuario?");
+    if (!confirmDelete) return;
+
+    try {
+        const response = await fetch(`/api/users/${userId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            alert(errorData.message || `Error al eliminar el usuario con ID ${userId}`);
+        } else {
+            alert('Usuario eliminado correctamente');
+            location.reload();
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error al eliminar el usuario: ' + error.message);
+    }
+}
+</script>
+
+{{!-- async function deleteUser(event,userId) {
+        event.preventDefault();
+        
+        const confirmDelete = confirm("¿Estás seguro de que deseas eliminar este usuario?");
+        if (!confirmDelete) return;
+
+        try {
+            const response = await fetch(`/api/users/${userId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                alert(errorData.message || `Error al eliminar el usuario con ID ${userId}`);
+            } else {
+                alert('Usuario eliminado correctamente');
+                location.reload();
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error al eliminar el usuario');
+        } --}}

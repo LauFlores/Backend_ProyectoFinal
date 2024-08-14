@@ -1,0 +1,245 @@
+openapi: 3.0.1
+info:
+  title: API de Carritos
+  version: 1.0.0
+  description: Documentación de la API para el módulo de carritos
+
+paths:
+  /api/carts:
+    post:
+      summary: Crear un nuevo carrito
+      tags: [Carritos]
+      responses:
+        '200':
+          description: Carrito creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        '500':
+          description: Error del servidor
+
+  /api/carts/{cid}:
+    get:
+      summary: Obtener productos en un carrito
+      tags: [Carritos]
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista de productos en el carrito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        '404':
+          description: Carrito no encontrado
+        '500':
+          description: Error del servidor
+
+    put:
+      summary: Actualizar productos en un carrito
+      tags: [Carritos]
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito
+          schema:
+            type: string
+      requestBody:
+        description: Lista de productos actualizados
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Product'
+      responses:
+        '200':
+          description: Carrito actualizado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        '500':
+          description: Error del servidor
+
+    delete:
+      summary: Vaciar un carrito
+      tags: [Carritos]
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Carrito vaciado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        '500':
+          description: Error del servidor
+
+  /api/carts/{cid}/product/{pid}:
+    post:
+      summary: Agregar un producto a un carrito
+      tags: [Carritos]
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito
+          schema:
+            type: string
+        - name: pid
+          in: path
+          required: true
+          description: ID del producto
+          schema:
+            type: string
+      requestBody:
+        description: Cantidad del producto a agregar
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quantity:
+                  type: integer
+      responses:
+        '200':
+          description: Producto agregado al carrito exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        '403':
+          description: No se puede agregar un producto creado por el mismo usuario premium
+        '404':
+          description: Producto no encontrado
+        '500':
+          description: Error del servidor
+
+    delete:
+      summary: Eliminar un producto de un carrito
+      tags: [Carritos]
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito
+          schema:
+            type: string
+        - name: pid
+          in: path
+          required: true
+          description: ID del producto
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Producto eliminado del carrito exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        '500':
+          description: Error del servidor
+
+    put:
+      summary: Actualizar la cantidad de un producto en un carrito
+      tags: [Carritos]
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito
+          schema:
+            type: string
+        - name: pid
+          in: path
+          required: true
+          description: ID del producto
+          schema:
+            type: string
+      requestBody:
+        description: Nueva cantidad del producto
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quantity:
+                  type: integer
+      responses:
+        '200':
+          description: Cantidad del producto actualizada exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        '500':
+          description: Error del servidor
+
+  /api/carts/{cid}/purchase:
+    post:
+      summary: Finalizar la compra de un carrito
+      tags: [Carritos]
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Compra finalizada exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  unavailableProducts:
+                    type: array
+                    items:
+                      type: string
+        '500':
+          description: Error del servidor
+
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        _id:
+          type: string
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+        user:
+          type: string
+
+    Product:
+      type: object
+      properties:
+        product:
+          type: string
+        quantity:
+          type: integer
+        totalPrice:
+          type: number

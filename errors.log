@@ -1,0 +1,13 @@
+info: Usuario creado exitosamente: {"$__":{"$versionError":null,"activePaths":{"paths":{"age":"require","email":"require","first_name":"require","last_name":"require","password":"require"},"states":{"default":{},"modify":{},"require":{"age":true,"email":true,"first_name":true,"last_name":true,"password":true}}},"backup":{"activePaths":{"default":{},"modify":{"cart":true}},"validationError":null},"cachedRequired":{},"inserting":false,"modifiedPaths":["cart"],"op":null,"saveOptions":null,"savedState":{},"saving":null,"validating":null},"$isNew":false,"_doc":{"__v":0,"_id":"663bbb81e7c65b871b7cb358","age":30,"cart":"663bbb82e7c65b871b7cb35a","email":"j@p.com","first_name":"Juan","last_name":"Perez","password":"$2b$10$EeiNxfXTmOLisf1BBtLAquOeD8wPiq4.iqt5Uu6UXLf8aa0bdF8lq","role":"user"}}
+error: Error en el inicio de sesión
+error: Error en el inicio de sesión
+info: Este es un mensaje de información
+info: Este es un mensaje de información
+info: Este es un mensaje de información
+info: Este es un mensaje de información
+info: Este es un mensaje de información
+info: Este es un mensaje de información
+info: Este es un mensaje de información
+warning: Este es un mensaje de advertencia
+error: Este es un mensaje de error
+fatal: Este es un mensaje fatal

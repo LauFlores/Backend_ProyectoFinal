@@ -1,0 +1,167 @@
+openapi: 3.0.1
+info:
+  title: API de Productos
+  version: 1.0.0
+  description: Documentación de la API para el módulo de productos
+
+paths:
+  /api/products:
+    get:
+      summary: Obtener lista de productos
+      tags: [Productos]
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          description: Límite de productos a devolver
+          schema:
+            type: integer
+        - name: page
+          in: query
+          required: false
+          description: Página de resultados a devolver
+          schema:
+            type: integer
+        - name: sort
+          in: query
+          required: false
+          description: Criterio de ordenación
+          schema:
+            type: string
+        - name: query
+          in: query
+          required: false
+          description: Consulta de búsqueda
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista de productos obtenida exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductList'
+        '500':
+          description: Error del servidor
+
+    post:
+      summary: Agregar un nuevo producto
+      tags: [Productos]
+      requestBody:
+        description: Datos del nuevo producto
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '201':
+          description: Producto agregado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '500':
+          description: Error del servidor
+
+  /api/products/{pid}:
+    get:
+      summary: Obtener un producto por ID
+      tags: [Productos]
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: ID del producto
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Producto obtenido exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Producto no encontrado
+        '500':
+          description: Error del servidor
+
+    put:
+      summary: Actualizar un producto
+      tags: [Productos]
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: ID del producto
+          schema:
+            type: string
+      requestBody:
+        description: Datos actualizados del producto
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '200':
+          description: Producto actualizado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '500':
+          description: Error del servidor
+
+    delete:
+      summary: Eliminar un producto
+      tags: [Productos]
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: ID del producto
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Producto eliminado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '500':
+          description: Error del servidor
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        stock:
+          type: integer
+        category:
+          type: string
+
+    ProductList:
+      type: object
+      properties:
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+        totalItems:
+          type: integer
+        totalPages:
+          type: integer
+        currentPage:
+          type: integer

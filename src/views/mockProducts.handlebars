@@ -1,0 +1,48 @@
+
+     <style>
+        /* Estilos para las tarjetas */
+        .cardMock {
+            width: 200px; /* Ancho de la tarjeta */
+            height: 300px; /* Altura de la tarjeta */
+            border: 1px solid #ccc;
+            margin: 10px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            overflow: auto; /* Agrega barra de desplazamiento si el contenido se desborda */
+        }
+
+        .cardMock h3 {
+            font-size: 12px; /* Tamaño del título */
+            margin-top: 0; /* Elimina el margen superior del título */
+        }
+
+        .cardMock p {
+            font-size: 10px; /* Tamaño del texto */
+        }
+
+        /* Otros estilos para el formulario, botones, etc. */
+    </style>
+
+    <h1>Mock Products</h1>
+    <div class="cardsContainer">
+        {{#each products}}
+        <div class="cardMock">
+            <h3>{{title}}</h3>
+            <p>{{description}}</p>
+            <p>Precio: ${{price}}</p>
+            {{!-- <p>Categoría: {{category}}</p> --}}
+            <!-- Agregar un formulario simulado para agregar al carrito -->
+            <form>
+                <button type="submit">Agregar al Carrito</button>
+            </form>
+        </div>
+        {{/each}}
+    </div>
+

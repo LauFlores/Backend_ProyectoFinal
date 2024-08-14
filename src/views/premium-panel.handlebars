@@ -1,0 +1,35 @@
+<h1>Bienvenido al Panel de Usuarios Premium</h1>
+<h3 id="role" class="hidden">{{role}}</h3>
+<h3 id="email" class="hidden">{{email}}</h3>
+
+
+
+<!-- Lista de productos del usuario -->
+<h2>Tus Productos</h2>
+
+
+<div id="productsContainer" class="container"></div>
+
+
+{{!-- Agregar productos --}}
+
+<h2>Agregar productos</h2>
+
+<form>
+    <input type="text" id="title" placeholder="Titulo">
+    <input type="text" id="description" placeholder="Descripcion">
+    <input type="text" id="code" placeholder="Codigo">
+    <input type="number" id="price" placeholder="Precio">
+    <input type="number" id="stock" placeholder="Stock">
+    <input type="text" id="category" placeholder="Categoria">
+    <input type="text" id="img" value="Sin imagen">
+    <select id="status">
+        <option value="true"> Activo </option>
+        <option value="false"> Inactivo </option>
+    </select>
+    <button id="btnSend"> Enviar </button>
+</form>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+<script src="js/realtime.js"></script>
