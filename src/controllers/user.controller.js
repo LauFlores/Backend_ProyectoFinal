@@ -29,7 +29,7 @@ class UserController {
 
         // Crear un carrito solo para los usuarios que no son administradores
         let newCart;
-        if (req.user.role === "user") {
+        if (req.user.role === "usuario" || req.user.role === "premium") {
           newCart = await cartRepository.createCart();
         }
 

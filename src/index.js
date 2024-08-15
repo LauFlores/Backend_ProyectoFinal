@@ -21,6 +21,7 @@ const configObject = require("./config/config.js");
 const testRouter = require('./routes/test.router.js');
 const swaggerConfig = require('./config/swagger.js');
 
+
 //const socket = require("socket.io");
 //const { initialize } = require("passport");
 
@@ -30,8 +31,12 @@ app.use(express.json());
 app.use(express.static("./src/public"));
 app.use(session({
     secret:"secretCoder",
-    resave: true, 
-    saveUninitialized:true,   
+    resave: false, 
+    saveUninitialized:true,
+    cookie: { secure: false,
+        maxAge: 3600000, // 1 hora en milisegundos
+        httpOnly: true
+    },   
     store: MongoStore.create({
         mongoUrl: "mongodb+srv://floreslaura1787:coderhouse@cluster0.das1njd.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=Cluster0", ttl: 100
     })
@@ -76,4 +81,5 @@ const server = app.listen(PUERTO, () => {
 ///Websockets: 
 const SocketManager = require("./sockets/socketManager.js");
 new SocketManager(server);
+
 
